@@ -1,0 +1,14 @@
+#cloud-config
+users:
+  - name: nicknjihian
+    ssh-authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDFIyai9IB0nKS46VRJ1Wfw3FceeYG6U2010GsTl3vlLeruXdUl/KpGNp4eTmAdXZy+xUw3Cv3ZaXLDZXUd90o8D8irp8gFXlz+Rd016otS5/nxuuqtBxAanA8kyBDHtV5hFWQRwWCoBn+9PzkCv+aYAgMNbJBZA2BnWi6/q+LTyKrlLY2ajA6LCHpstjMTIfOMp2o9MvHyygeFtASeJJ1rNdRbEQ08AAWMQf1jY8zK4vyPcXXhy5gewORjbJTsA0oZOwTtPdNnsTfKcqk5gQVstprUl2Qcex2MgQd0clbfPe1DLbynOXulHMveeN0jC3ecXtVvq3cV++SdTjBEKRgdsxU4LbIBBxVQT0myMWfLFbM3APtBXDcFtUwfX6ShYhBjp6DU7hDrcTrQOhqh35uETjqkU0zmkzl5EFRuXo5YBoffe3LLzmdQo+S2WQlEKfLUWaR5+5JQCBNefUAJYtQx5u1yR2s1mM2Iw3TXJBLpdpNHkKKfhfvpoQEATYVCTYE= nicknjihia@nicknjihia-Lenovo-Legion-5-15IMH05H
+      sudo: ['ALL=(ALL) NOPASSWD:ALL']
+      groups: users
+      shell: /bin/bash
+packages:
+  - podman
+runcmd:
+  - echo "AllowUsers nicknjihian" >> /etc/ssh/sshd_config
+  - restart ssh
+  - curl --silent --remote-name --location https://github.com/ceph/ceph/raw/quincy/src/cephadm/cephadm && chmod u+x cephadm && sudo ./cephadm add-repo --release quincy && sudo ./cephadm install && sudo ./cephadm install ceph-common
