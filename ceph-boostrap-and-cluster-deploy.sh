@@ -75,3 +75,13 @@ ssh -t $username@$mon1 "sudo ceph orch apply osd --all-available-devices
 --unmanaged=true"
 
 
+# Reserving Free Memory for OSDs
+# See https://access.redhat.com/documentation/en-us/red_hat_ceph_storage/3/html/ceph_object_gateway_for_production/assembly-configuring-a-cluster-rgw-adv
+
+for osd_node in $osd1 $osd2 $osd3; do
+  ssh -t $username@$osd_node "echo "vm.min_free_kbytes = 524288" | sudo tee
+  --append /etc/sysctl.conf";
+done
+
+
+
