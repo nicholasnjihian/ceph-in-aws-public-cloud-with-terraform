@@ -6,9 +6,14 @@ users:
       sudo: ['ALL=(ALL) NOPASSWD:ALL']
       groups: users
       shell: /bin/bash
-packages:
-  - podman
 runcmd:
+  - sudo apt update
+  - sudo apt upgrade -y
+  - sudo apt install -y curl wget
   - echo "AllowUsers nicknjihian" >> /etc/ssh/sshd_config
   - restart ssh
   - curl --silent --remote-name --location https://github.com/ceph/ceph/raw/quincy/src/cephadm/cephadm && chmod u+x cephadm && sudo ./cephadm add-repo --release quincy && sudo ./cephadm install && sudo ./cephadm install ceph-common
+  - echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+  - curl -L "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/Release.key" | sudo apt-key add -
+  - sudo apt update
+  - sudo apt install podman
